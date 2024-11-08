@@ -1,0 +1,10 @@
+import "ecc/proofOfOwnership.zok" as proofOfOwnership
+import "ecc/babyjubjubParams.zok" as context
+
+def main(field[2] pk, private field sk) -> bool:
+
+    // load BabyJubJub context
+    context = context()
+
+    // perform prove of ownership of sk
+    return proofOfOwnership(pk, sk, context)
