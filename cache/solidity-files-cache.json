@@ -38,8 +38,8 @@
       ]
     },
     "C:\\Users\\sidla\\Documents\\GitHub\\onchain-decentralized-identity-manager\\contracts\\ODIM.sol": {
-      "lastModificationDate": 1731075988200,
-      "contentHash": "4762ad824dee21da75e8fed2f344e216",
+      "lastModificationDate": 1731082860478,
+      "contentHash": "8f32ade5f4ac8b84dac626ced60559e0",
       "sourceName": "contracts/ODIM.sol",
       "solcConfig": {
         "version": "0.8.27",

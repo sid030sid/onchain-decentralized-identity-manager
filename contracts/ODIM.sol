@@ -6,8 +6,7 @@ contract ODIM {
     mapping(string => string) public identities; //stores the circular linked list of each user (note: each circluar linked list of identifiers such as DIDs makes the decentralized identity of the user)
 
     function addIdentity(string memory newIdentity) public {
-
-        //TODO check proof of ownership of newIdentity
+        //TODO check ZK proof of ownership of newIdentity
 
         //convert sender to string
         string memory sender = addressToString(msg.sender);
@@ -37,12 +36,14 @@ contract ODIM {
         bytes32 comparableSender = keccak256(abi.encodePacked((sender)));
 
         //check if sender is part of the same circular linked list as toBeRemovedIdentity
+        string memory currentIdentity = sender; //helping variable for removal process
         string memory nextFirstIdentity = identities[sender];
         bytes32 comparableNextFirstidentity = keccak256(abi.encodePacked((nextFirstIdentity)));
         while(comparableToBeRemovedIdentity != comparableNextFirstidentity){
             if(comparableNextFirstidentity == comparableSender){
                 revert("toBeRemovedIdentity is not part of the same circular linked list as msg.sender");
             }
+            currentIdentity = nextFirstIdentity; //update to be able to remoe toBeRemovedIdentity
             nextFirstIdentity = identities[nextFirstIdentity];
             comparableNextFirstidentity = keccak256(abi.encodePacked((nextFirstIdentity)));
         }
@@ -53,7 +54,8 @@ contract ODIM {
             // Option 3: ???
         
         //perform identity removal
-        delete identities[toBeRemovedIdentity];
+        identities[currentIdentity] = identities[toBeRemovedIdentity];
+        identities[toBeRemovedIdentity] = "";
     }
 
     // by continue calling this function till one gets the identity that is equal to the inputted identity from the first function call, one can get all items form the circular linked list
