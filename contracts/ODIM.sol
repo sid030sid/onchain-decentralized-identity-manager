@@ -3,7 +3,10 @@ pragma solidity ^0.8.27;
 
 // On-chain Decentralized Identity Manager (ODIM)
 contract ODIM {
+
     mapping(string => string) public identities; //stores the circular linked list of each user (note: each circluar linked list of identifiers such as DIDs makes the decentralized identity of the user)
+
+    event IdentityAdded(string addedBy, string newIdentity);
 
     function addIdentity(string memory newIdentity) public {
         //TODO check ZK proof of ownership of newIdentity
@@ -25,6 +28,8 @@ contract ODIM {
             //push down original first next identity in circular linked list
             identities[newIdentity] = firstIdentity;
         }
+        
+        emit IdentityAdded(sender, newIdentity);
     }
 
     function removeIdentity(string memory toBeRemovedIdentity) public {
@@ -64,19 +69,19 @@ contract ODIM {
     }
 
     //TODO in future: find a way so that this function becomes obsolete
-    function addressToString(address _addr) internal pure returns (string memory) {
-        bytes32 value = bytes32(uint256(uint160(_addr)));
-        bytes memory alphabet = "0123456789abcdef";
-         
-        bytes memory str = new bytes(42);
+    function addressToString(address _address) internal pure returns (string memory) {
+         bytes memory addressBytes = abi.encodePacked(_address);
+        bytes memory hexChars = "0123456789abcdef";
+        bytes memory str = new bytes(2 + addressBytes.length * 2);
+        
         str[0] = '0';
         str[1] = 'x';
-         
-        for (uint256 i = 0; i < 20; i++) {
-            str[2 + i * 2] = alphabet[uint8(value[i + 12] >> 4)];
-            str[3 + i * 2] = alphabet[uint8(value[i + 12] & 0x0f)];
+        
+        for (uint i = 0; i < addressBytes.length; i++) {
+            str[2 + i * 2] = hexChars[uint8(addressBytes[i] >> 4)];
+            str[3 + i * 2] = hexChars[uint8(addressBytes[i] & 0x0f)];
         }
-         
+        
         return string(str);
     }
 }
