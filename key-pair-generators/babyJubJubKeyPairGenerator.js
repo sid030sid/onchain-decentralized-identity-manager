@@ -16,17 +16,21 @@ async function generateBabyJubjubKeyPair() {
     const G = babyJub.Generator;
     const pubKeyPoint = babyJub.mulPointEscalar(G, skField);
 
+    // Convert the BigInt values of X and Y to plain strings
+    const pkFieldX = pubKeyPoint[0].toString(); // Public key X component (no commas)
+    const pkFieldY = pubKeyPoint[1].toString(); // Public key Y component (no commas)
+
+    // Return public and private keys as strings
     return {
-        privateKey: sk.toString(16), // Private key as hex
-        publicKey: {
-            x: pubKeyPoint[0].toString(),
-            y: pubKeyPoint[1].toString()
-        }
+        privateKey: skField.toString(), // Private key as a string (field element)
+        publicKeyX: pkFieldX.toString().replaceAll(",", ""),           //TODO chance since this cannot be right
+        publicKeyY: pkFieldY.toString().replaceAll(",", "")
     };
 }
 
 // Generate and log the key pair
 generateBabyJubjubKeyPair().then(keyPair => {
-    console.log("Private Key:", keyPair.privateKey);
-    console.log("Public Key (x, y):", keyPair.publicKey);
+    console.log("Private Key (field):", keyPair.privateKey);
+    console.log("Public Key X (field):", keyPair.publicKeyX);
+    console.log("Public Key Y (field):", keyPair.publicKeyY);
 }).catch(console.error);
