@@ -11,5 +11,9 @@
   "devDependencies": {
     "@nomicfoundation/hardhat-toolbox": "^5.0.0",
     "hardhat": "^2.22.15"
+  },
+  "dependencies": {
+    "circomlibjs": "^0.1.7",
+    "crypto": "^1.0.1"
   }
 }
