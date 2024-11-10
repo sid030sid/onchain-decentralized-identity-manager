@@ -1,13 +1,8 @@
-const {
-  time,
-  loadFixture,
-} = require("@nomicfoundation/hardhat-toolbox/network-helpers");
-const { anyValue } = require("@nomicfoundation/hardhat-chai-matchers/withArgs");
+const { loadFixture } = require("@nomicfoundation/hardhat-toolbox/network-helpers");
 const { expect } = require("chai");
 
 describe("ODIM", function () {
   async function deployODIM() {
-
     // Contracts are deployed using the first signer/account by default
     const [owner, otherAccount] = await ethers.getSigners();
 
@@ -23,39 +18,78 @@ describe("ODIM", function () {
 
       expect(await odim.getNextIdentity(owner.address)).to.equal("");
     });
-
-    it("Should set the right owner", async function () {
-    });
-
-    it("Should receive and store the funds to lock", async function () {
-    });
   });
 
   describe("Adding identities", function () {
-    it("adding one DID to decentralized identity", async function () {
-      const { odim, owner, otherAccount } = await loadFixture(deployODIM);
+    it("add one identity to decentralized identity of owner", async function () {
+      const { odim, owner } = await loadFixture(deployODIM);
 
+      // Call the addIdentity function
       const tx = await odim.addIdentity("did:example:123");
+
+      // Wait for the transaction to be mined and get the receipt
       const receipt = await tx.wait();
 
-      console.log("addedIdentity transaction", tx)
-      console.log("receipt", receipt);
-
-      const event = receipt.events?.find(event => event.event === "IdentityAdded");
+      // Check if the IdentityAdded event is emitted
+      const event = receipt.logs?.find(log => log.fragment.name === "IdentityAdded");
+      
       if (event) {
-          const { sender, newIdentity } = event.args;
-          console.log("Sender:", sender);
-          console.log("New Identity:", newIdentity);
+        const { addedBy, newIdentity } = event.args;
+
+        // Verify that the event's arguments are correct
+        expect(addedBy).to.equal(owner.address.toString().toLowerCase()); // addedBy should be the owner's address
+        expect(newIdentity).to.equal("did:example:123"); // newIdentity should match the added identity
+      } else {
+        throw new Error("IdentityAdded event not found");
       }
-      expect(await odim.getNextIdentity(owner.address.toString(16))).to.equal("did:example:123");
+
+      // Verify that the identity was added and that circular linked lsit of identities is intact
+      expect(await odim.getNextIdentity(owner.address.toString().toLowerCase())).to.equal("did:example:123");
+      expect(await odim.getNextIdentity("did:example:123")).to.equal(owner.address.toString().toLowerCase());
+    });
+  });
+
+  describe("Removing identities", function () {
+
+    it("remove one identity that is not part of the circular linked list", async function () {
+      //this should not be possible
     });
 
-    it("adding one ETH address to decentralized identity", async function () {
+    it("add one identity and remove it", async function () {
+      const { odim, owner } = await loadFixture(deployODIM);
 
-    }); 
+      // Call the addIdentity function
+      const tx = await odim.addIdentity("did:example:123");
 
-    it("adding DID and ETH address to decentralized identity", async function () {
+      // Verify that the identity was added and that circular linked lsit of identities is intact
+      expect(await odim.getNextIdentity(owner.address.toString().toLowerCase())).to.equal("did:example:123");
+      expect(await odim.getNextIdentity("did:example:123")).to.equal(owner.address.toString().toLowerCase());
 
-    }); 
+      // Remove the identity
+      await odim.removeIdentity("did:example:123");
+
+      // Verify that the identity was removed
+      expect(await odim.getNextIdentity("did:example:123")).to.equal("");
+
+      // Verify that the circular linked list of identities is intact
+      expect(await odim.getNextIdentity(owner.address.toString().toLowerCase())).to.equal(owner.address.toString().toLowerCase());
+    });
+
+    it("remove one identity that is part of the circular linked list of another user", async function () {
+      const { odim, owner, otherAccount } = await loadFixture(deployODIM);
+
+      // Call the addIdentity function
+      const tx = await odim.addIdentity("did:example:123");
+
+      // Verify that the identity was added and that circular linked lsit of identities is intact
+      expect(await odim.getNextIdentity(owner.address.toString().toLowerCase())).to.equal("did:example:123");
+      expect(await odim.getNextIdentity("did:example:123")).to.equal(owner.address.toString().toLowerCase());
+
+      // connect as otherAccount and attempt to remove the identity, which should be reverted by ODIM with message:
+      // "toBeRemovedIdentity is not part of the same circular linked list as msg.sender"
+      await odim.connect(otherAccount).removeIdentity("did:example:123"); // TODO
+
+      
+    });
   });
 });
