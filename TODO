@@ -1,1 +1,5 @@
 add ZKP verification to function addIdentity
+
+once ODIM deploys make demo video or description of how one can create ZKP for adding identity
+once ODIM deployed make demo video of how once can use it on etherscan to manage decentrlaized identities
+once ODIM deployed to testnet provide script in ethersJS to use ODIM for querying its decentralized identity registry and describe how to do it in 
