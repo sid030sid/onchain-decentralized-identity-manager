@@ -9,6 +9,11 @@ contract ODIM {
     event IdentityAdded(string addedBy, string newIdentity);
 
     function addIdentity(string memory newIdentity) public {
+        //check if newIdentity is already part of identities
+        if(bytes(identities[newIdentity]).length != 0){
+            revert("newIdentity is already part of registered identities");
+        }
+
         //TODO check ZK proof of ownership of newIdentity
 
         //convert sender to string
@@ -33,6 +38,11 @@ contract ODIM {
     }
 
     function removeIdentity(string memory toBeRemovedIdentity) public {
+        //check if toBeRemovedIdentity is part of identities
+        if(bytes(identities[toBeRemovedIdentity]).length == 0){
+            revert("toBeRemovedIdentity is not part of registered identities");
+        }
+
         //convert sender to string
         string memory sender = addressToString(msg.sender);
 
@@ -43,10 +53,13 @@ contract ODIM {
         //check if sender is part of the same circular linked list as toBeRemovedIdentity
         string memory currentIdentity = sender; //helping variable for removal process
         string memory nextFirstIdentity = identities[sender];
+        if(bytes(nextFirstIdentity).length == 0){ //check if sender is generally part of circular linked list of identities
+            revert("msg.sender is not part of registered identities");
+        }
         bytes32 comparableNextFirstidentity = keccak256(abi.encodePacked((nextFirstIdentity)));
         while(comparableToBeRemovedIdentity != comparableNextFirstidentity){
             if(comparableNextFirstidentity == comparableSender){
-                revert("toBeRemovedIdentity is not part of the same circular linked list as msg.sender");
+                revert("toBeRemovedIdentity is not part of msg.sender's circular linked list of identities");
             }
             currentIdentity = nextFirstIdentity; //update to be able to remoe toBeRemovedIdentity
             nextFirstIdentity = identities[nextFirstIdentity];

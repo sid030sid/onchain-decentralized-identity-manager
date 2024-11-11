@@ -47,6 +47,26 @@ describe("ODIM", function () {
       expect(await odim.getNextIdentity(owner.address.toString().toLowerCase())).to.equal("did:example:123");
       expect(await odim.getNextIdentity("did:example:123")).to.equal(owner.address.toString().toLowerCase());
     });
+
+    /*NOTE: this case cannot be tested but will surely not be possible due to adding of identities will always be part of the msg.sender's circular linked list of identities
+    it("attempt to add an identity to another user's circular linked list of identities", async function () {
+      const { odim, owner } = await loadFixture(deployODIM);
+
+    });
+    */
+
+    it("attempt to add an identity that is already listed in ODIM's identity registry", async function () {
+      const { odim, otherAccount } = await loadFixture(deployODIM);
+
+      // add an identity
+      await odim.addIdentity("did:example:123");
+
+      // attempt to add the same identity again by the same user
+      await expect(odim.addIdentity("did:example:123")).to.be.revertedWith("newIdentity is already part of registered identities");
+
+      // attempt to add the same identity again by the same user
+      await expect(odim.connect(otherAccount).addIdentity("did:example:123")).to.be.revertedWith("newIdentity is already part of registered identities");
+    });
   });
 
   describe("Removing identities", function () {
@@ -59,7 +79,7 @@ describe("ODIM", function () {
       const { odim, owner } = await loadFixture(deployODIM);
 
       // Call the addIdentity function
-      const tx = await odim.addIdentity("did:example:123");
+      await odim.addIdentity("did:example:123");
 
       // Verify that the identity was added and that circular linked lsit of identities is intact
       expect(await odim.getNextIdentity(owner.address.toString().toLowerCase())).to.equal("did:example:123");
@@ -75,21 +95,46 @@ describe("ODIM", function () {
       expect(await odim.getNextIdentity(owner.address.toString().toLowerCase())).to.equal(owner.address.toString().toLowerCase());
     });
 
-    it("remove one identity that is part of the circular linked list of another user", async function () {
+    it("attempt to remove one identity altough sender is not registered", async function () {
       const { odim, owner, otherAccount } = await loadFixture(deployODIM);
 
       // Call the addIdentity function
-      const tx = await odim.addIdentity("did:example:123");
+      await odim.addIdentity("did:example:123");
 
-      // Verify that the identity was added and that circular linked lsit of identities is intact
+      // Verify that the identity was added and that circular linked list of identities is intact
       expect(await odim.getNextIdentity(owner.address.toString().toLowerCase())).to.equal("did:example:123");
       expect(await odim.getNextIdentity("did:example:123")).to.equal(owner.address.toString().toLowerCase());
 
-      // connect as otherAccount and attempt to remove the identity, which should be reverted by ODIM with message:
-      // "toBeRemovedIdentity is not part of the same circular linked list as msg.sender"
-      await odim.connect(otherAccount).removeIdentity("did:example:123"); // TODO
+      // connect as otherAccount and attempt to remove the identity, which should be reverted by ODIM due to msg.sender not being part of ODIM's identity registry
+      await expect(odim.connect(otherAccount).removeIdentity("did:example:123")).to.be.revertedWith("msg.sender is not part of registered identities");
+    });
 
-      
+    it("attempt to remove one identity that is part of the circular linked list of another user", async function () {
+      const { odim, owner, otherAccount } = await loadFixture(deployODIM);
+
+      // Call the addIdentity function
+      await odim.addIdentity("did:example:123");
+
+      // Verify that the identity was added and that circular linked list of identities is intact
+      expect(await odim.getNextIdentity(owner.address.toString().toLowerCase())).to.equal("did:example:123");
+      expect(await odim.getNextIdentity("did:example:123")).to.equal(owner.address.toString().toLowerCase());
+
+      // Call the addIdentity function as another user
+      await odim.connect(otherAccount).addIdentity("did:example:456");
+
+      // Verify that the identity was added and that circular linked list of identities is intact
+      expect(await odim.getNextIdentity(otherAccount.address.toString().toLowerCase())).to.equal("did:example:456");
+      expect(await odim.getNextIdentity("did:example:456")).to.equal(otherAccount.address.toString().toLowerCase());
+
+      // connect as otherAccount and attempt to remove the identity, which should be reverted by ODIM with message:
+      await expect(odim.connect(otherAccount).removeIdentity("did:example:123")).to.be.revertedWith("toBeRemovedIdentity is not part of msg.sender's circular linked list of identities");
+    });
+
+    it("attempt to remove one identity that is not part of ODIM's identity registry", async function () {
+      const {odim} = await loadFixture(deployODIM);
+
+      // attempt to remove an identity that is not part of ODIM's identity registry
+      await expect(odim.removeIdentity("did:example:123")).to.be.revertedWith("toBeRemovedIdentity is not part of registered identities");
     });
   });
 });
