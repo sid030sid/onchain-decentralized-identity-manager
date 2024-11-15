@@ -13,6 +13,11 @@ ODIM allows users to manage the identifiers that they have created to use Decent
         - run `python transformKeyPairForZokrates.py privateKey` in active virtual env while `privateKey` being set to the private key of the previously generated key pair (**Example ed25519 private key**: 79340758399813660106305464615835886567798495571483990055077550004444527965420 can be used instead if desired.)
         - open file `transformedKeyPair.txt` to view the just transformed key pair
 2. test ODIM: open terminal and run `npx hardhat test` while in root folder (run `REPORT_GAS=true npx hardhat test` if gas report should be printed out)
+  1. copy and paste the `main.zok` in ``zokrates-circuts`` folder in remix IDE with zokrates plguin installed
+  2. compile main.zok in remix
+  3. compute proof
+  4. generate witness of proof
+  5. insert the witness into ODIM while adding new identity to decentralized identity
 3. deploy ODIM: open terminal and run `npx hardhat ignition deploy ./ignition/modules/Lock.js` while in root folder
 4. use ODIM to manage my decentralized identity:
     - Option 1 - via Etherscan interface: Demo video TBA
