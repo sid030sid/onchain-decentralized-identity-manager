@@ -4,7 +4,10 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "getKeyPair:babyJubJub": "node key-pair-generators/babyJubJubKeyPairGenerator.js",
+    "getKeyPair:ed25519": "node key-pair-generators/ed25519KeyPairGenerator.js",
+    "getKeyPair:p256": "node key-pair-generators/p256KeyPairGenerator.js"
   },
   "author": "",
   "license": "ISC",
@@ -13,7 +16,9 @@
     "hardhat": "^2.22.15"
   },
   "dependencies": {
+    "bignumber.js": "^9.1.2",
     "circomlibjs": "^0.1.7",
-    "crypto": "^1.0.1"
+    "crypto": "^1.0.1",
+    "tweetnacl": "^1.0.3"
   }
 }

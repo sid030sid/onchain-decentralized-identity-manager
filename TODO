@@ -1,4 +1,5 @@
 add ZKP verification to function addIdentity
+attempt to write tests of ODIM in hardhat using zokratesJS: https://zokrates.github.io/toolbox/zokrates_js.html
 
 once ODIM deploys make demo video or description of how one can create ZKP for adding identity
 once ODIM deployed make demo video of how once can use it on etherscan to manage decentrlaized identities

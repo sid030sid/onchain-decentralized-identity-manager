@@ -8,3 +8,20 @@ def main(field[2] pk, private field sk) {
     assert(proof == true);
     return;
 }
+
+
+// 2nd compilable version
+import "ecc/proofOfOwnership" as proofOfOwnership;
+from "ecc/babyjubjubParams" import BabyJubJubParams;
+import "ecc/babyjubjubParams.code" as context;
+
+def main(field[2] pk, private field sk) {
+
+	// load in BbyJubJub context
+	BabyJubJubParams context = context();
+
+    // perform prove of ownership of sk
+    bool proof = proofOfOwnership(pk, sk, context);
+    assert(proof == true);
+    return;
+}
