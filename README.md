@@ -2,7 +2,16 @@
 ODIM allows users to manage the identifiers that they have created to use Decentralized Applications (DApps). Such identifiers, e. g. wallet addresses or Decentralized Identifiers (DIDs), form the unique decentralized identity of users. Therefore, ODIM is world's first **O**n-chain **D**ecentralized **I**dentity **M**anager, enabling users to manage their decentralized identity efficiently while DApps can rely on ODIM's decentralized identity registry for interoperability of decentralized processes, such as the issuance and verification of verifiable credentials (see more for [why using ODIM](#why-using-odim)).
 
 ## How to...
-1. set up ODIM: open terminal and run `npm install` while in root folder (**NOTE**: nodeJS version 20.8.1 was used to build this repo!)
+1. set up ODIM: 
+    1. open terminal and run `npm install` while in root folder (**NOTE**: nodeJS version 20.8.1 was used to build this repo!)
+    2. generate key pair underlying identifier of decentralized identity (e.g. DID):
+        - run `node keyPairGenerator.js curve=cruveType` while in root folder and ``curveType`` being set to `ed25519`, `p-256`, or `secp256kv1`
+    3. set up pycrypto and transform previously generated key pair for zokrates: 
+        - create python virtual env in folder `pycrypto` with the name `venv`, e.g. by running ``py -m venv venv`` in folder `pycrypto` 
+        - activate python virtual environment, e.g. by running ``venv\Scripts\activate.bat`` while in folder `pycrypto` with cmd terminal (**NOTE**: leave this cmd terminal open for later usage)
+        - run `pip install -r requirements.txt` in active virtual env to install dependencies
+        - run `python transformKeyPairForZokrates.py privateKey` in active virtual env while `privateKey` being set to the private key of the previously generated key pair (**Example ed25519 private key**: 79340758399813660106305464615835886567798495571483990055077550004444527965420 can be used instead if desired.)
+        - open file `transformedKeyPair.txt` to view the just transformed key pair
 2. test ODIM: open terminal and run `npx hardhat test` while in root folder (run `REPORT_GAS=true npx hardhat test` if gas report should be printed out)
 3. deploy ODIM: open terminal and run `npx hardhat ignition deploy ./ignition/modules/Lock.js` while in root folder
 4. use ODIM to manage my decentralized identity:

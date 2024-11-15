@@ -1,5 +1,8 @@
+implement zokrates code for proving control over private key through public key deriviation or signature verification --> part of the evaluation to compare both approaches (thrid approach is to verify signature on-chain)
 add ZKP verification to function addIdentity
 attempt to write tests of ODIM in hardhat using zokratesJS: https://zokrates.github.io/toolbox/zokrates_js.html
+
+discuss whether it makes sense that the babyjubjub curve can be used for proving ownership of every private key type, e.g. ed25510, scp256k1, p256 etc.?
 
 once ODIM deploys make demo video or description of how one can create ZKP for adding identity
 once ODIM deployed make demo video of how once can use it on etherscan to manage decentrlaized identities
