@@ -7,8 +7,8 @@ ODIM allows users to manage the identifiers that they have created to use Decent
     2. generate key pair underlying identifier of decentralized identity (e.g. DID):
         - run `node keyPairGenerator.js curve=cruveType` while in root folder and ``curveType`` being set to `ed25519`, `p-256`, or `secp256kv1`
     3. set up pycrypto and transform previously generated key pair for zokrates: 
-        - create python virtual env in folder `pycrypto` with the name `venv`, e.g. by running ``py -m venv venv`` in folder `pycrypto` 
-        - activate python virtual environment, e.g. by running ``venv\Scripts\activate.bat`` while in folder `pycrypto` with cmd terminal (**NOTE**: leave this cmd terminal open for later usage)
+        - create python virtual env in folder `pycrypto-helper` with the name `venv`, e.g. by running ``py -m venv venv`` in folder `pycrypto-helper` 
+        - activate python virtual environment, e.g. by running ``venv\Scripts\activate.bat`` while in folder `pycrypto-helper` with cmd terminal (**NOTE**: leave this cmd terminal open for later usage)
         - run `pip install -r requirements.txt` in active virtual env to install dependencies
         - run `python transformKeyPairForZokrates.py privateKey` in active virtual env while `privateKey` being set to the private key of the previously generated key pair (**Example ed25519 private key**: 79340758399813660106305464615835886567798495571483990055077550004444527965420 can be used instead if desired.)
         - open file `transformedKeyPair.txt` to view the just transformed key pair
