@@ -1,3 +1,4 @@
+think about neccessitz of adding eddsa in circuit directly, making the python script obsolete (see main.zok for more info regarding this TODO)
 implement zokrates code for proving control over private key through public key deriviation or signature verification --> part of the evaluation to compare both approaches (thrid approach is to verify signature on-chain)
 add ZKP verification to function addIdentity
 attempt to write tests of ODIM in hardhat using zokratesJS: https://zokrates.github.io/toolbox/zokrates_js.html
