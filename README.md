@@ -32,6 +32,7 @@ ODIM allows users to manage the identifiers that they have created to use Decent
     - `removeIdentity`: Removes an identity from the circular linked list of the sender's decentralized identity.
     - `getNextIdentity`:Gets the next identity in the circular linked list of the sender's decentralized identity.
     - `verifyTx`: Verifies the Zokrates based ZKP of control over a babyjubjub based keypair (Note: this function is called by the function `addIdentity` and is available so that one can test the verification of the ZKP before inserting it in `addIdentity` function.)
+- programatically query decentralized identity of users via ODIM: see function `getDecentralizedIdentityFromOdim` in `ODIM.js` inside folder `test`
 
 ## Why using ODIM?
 1. Revocery

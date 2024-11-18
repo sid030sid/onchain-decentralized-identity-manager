@@ -1,6 +1,20 @@
 const { loadFixture } = require("@nomicfoundation/hardhat-toolbox/network-helpers");
 const { expect } = require("chai");
 
+const getDecentralizedIdentityFromOdim = async (identifier, odim) => {
+  try{
+    let nextIdentity = await odim.getNextIdentity(identifier);
+    let decentralizedIdentity = identifier;
+    while(nextIdentity !== identifier){
+      decentralizedIdentity = decentralizedIdentity + " -> " + nextIdentity;
+      nextIdentity = await odim.getNextIdentity(nextIdentity);
+    }
+    return decentralizedIdentity;
+  }catch(error){
+    return "Error: " + error;
+  }
+}
+
 describe("ODIM", function () {
   async function deployODIM() {
     // Contracts are deployed using the first signer/account by default
@@ -199,6 +213,37 @@ describe("ODIM", function () {
 
       // attempt to remove an identity that is not part of ODIM's identity registry
       await expect(odim.removeIdentity("did:example:123")).to.be.revertedWith("toBeRemovedIdentity is not part of registered identities");
+    });
+  });
+
+  describe("Querying identities", function () {
+
+    // ZKP attained by running main.zok in remix IDE with Zokrates plugin for babyjubjub based public keys of identity
+    const proof = [["0x23d120fb2b8d7f810da6c2227c12d484e638f638afe7c223c0c3179df03775b0","0x27c84be6b813c817774dfd4fbfb9a14cfb7a6a854558d318123605e6a2c2b564"],[["0x1decd236d26865ca024cbb8afe07be335ebce586434e4aa004f6ef8ada508d11","0x02a5c581fec1bb8ad2ca85e33e052c44e6e630fd9b2696e93d832e953032ce3a"],["0x2dc4807df77ab81c96d27ab688e879bca228254674f1268f5c87fcb8a8cf13e9","0x2cc1a707f0b7c6035550c5bed90f38fbd307487bd99d195eb06206e1b92c6595"]],["0x0871eabdf1ca4a8e52cdf5a09c9bd07fe2dfbf6ebbb1262b9bbebf15979496d1","0x004454c753c9eaae1cde537c00b0f2eba2173b5ac36b833a98e3f360285c0957"]]
+    const inputs = ["0x0cb5dbe89aae1fc863fbe6697cb902d4bb9e3987ad44a194640cca0a5852bea0","0x272446c799ec688204f91aabca7d4a4bca69deeafbb41aad4cd831a14de445b5","0x0cb5dbe89aae1fc863fbe6697cb902d4bb9e3987ad44a194640cca0a5852bea0","0x272446c799ec688204f91aabca7d4a4bca69deeafbb41aad4cd831a14de445b5"]
+    
+    it("get identity based on one user's identifier", async function () {
+      const { odim, owner, otherAccount } = await loadFixture(deployODIM);
+
+      // add identities of owner
+      await odim.addIdentity("did:example:123", proof, inputs);
+      await odim.addIdentity("did:example:456", proof, inputs);
+      await odim.addIdentity("did:example:789", proof, inputs);
+      await odim.addIdentity("did:example:101", proof, inputs);
+
+      // add identities of otherAccount
+      await odim.connect(otherAccount).addIdentity("did:example:111", proof, inputs);
+      await odim.connect(otherAccount).addIdentity("did:example:222", proof, inputs);
+      await odim.connect(otherAccount).addIdentity("did:example:333", proof, inputs);
+      await odim.connect(otherAccount).addIdentity("did:example:444", proof, inputs);
+      await odim.connect(otherAccount).addIdentity("did:example:555", proof, inputs);
+
+      // get the decentralized identity of owner
+      const ownerIdentity = await getDecentralizedIdentityFromOdim(owner.address.toString().toLowerCase(), odim);
+      expect(ownerIdentity).to.equal(owner.address.toString().toLowerCase()+" -> did:example:101 -> did:example:789 -> did:example:456 -> did:example:123");
+
+      const otherAccountIdentity = await getDecentralizedIdentityFromOdim(otherAccount.address.toString().toLowerCase(), odim);
+      expect(otherAccountIdentity).to.equal(otherAccount.address.toString().toLowerCase()+" -> did:example:555 -> did:example:444 -> did:example:333 -> did:example:222 -> did:example:111");
     });
   });
 });

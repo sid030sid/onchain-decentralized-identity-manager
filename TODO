@@ -1,10 +1,3 @@
-think about neccessitz of adding eddsa in circuit directly, making the python script obsolete (see main.zok for more info regarding this TODO)
-implement zokrates code for proving control over private key through public key deriviation or signature verification --> part of the evaluation to compare both approaches (thrid approach is to verify signature on-chain)
-add ZKP verification to function addIdentity
-attempt to write tests of ODIM in hardhat using zokratesJS: https://zokrates.github.io/toolbox/zokrates_js.html
-
-discuss whether it makes sense that the babyjubjub curve can be used for proving ownership of every private key type, e.g. ed25510, scp256k1, p256 etc.?
-
-once ODIM deploys make demo video or description of how one can create ZKP for adding identity
-once ODIM deployed make demo video of how once can use it on etherscan to manage decentrlaized identities
-once ODIM deployed to testnet provide script in ethersJS to use ODIM for querying its decentralized identity registry and describe how to do it in 
+Debug: publicKey value of an identity must be included in the identity itself otherwise one can use the same ZKP to add multiple different identities that all point to the same public key. since this does not make much sense for the user, this bug can remain for now.
+make a test that shows how to use ODIM for querying its decentralized identity registry and reference this test in readme
+make demo video or description of how one can create ZKP for adding identity
