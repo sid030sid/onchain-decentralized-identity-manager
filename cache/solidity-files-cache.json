@@ -2,8 +2,8 @@
   "_format": "hh-sol-cache-2",
   "files": {
     "C:\\Users\\sidla\\Documents\\GitHub\\onchain-decentralized-identity-manager\\contracts\\ODIM.sol": {
-      "lastModificationDate": 1731335560783,
-      "contentHash": "aa51054c2b1cf696fb4f911edf7df83c",
+      "lastModificationDate": 1731952510755,
+      "contentHash": "ec2270b5b87a90434b6ba4471edad51d",
       "sourceName": "contracts/ODIM.sol",
       "solcConfig": {
         "version": "0.8.27",
@@ -34,7 +34,45 @@
         "^0.8.27"
       ],
       "artifacts": [
-        "ODIM"
+        "ODIM",
+        "Pairing"
+      ]
+    },
+    "C:\\Users\\sidla\\Documents\\GitHub\\onchain-decentralized-identity-manager\\contracts\\Verifier.sol": {
+      "lastModificationDate": 1731951301949,
+      "contentHash": "ca0d6f6a68d02b78bc12980bfdd3bb21",
+      "sourceName": "contracts/Verifier.sol",
+      "solcConfig": {
+        "version": "0.8.27",
+        "settings": {
+          "evmVersion": "paris",
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        "^0.8.0"
+      ],
+      "artifacts": [
+        "Pairing",
+        "Verifier"
       ]
     }
   }

@@ -1,54 +1,6 @@
 import "ecc/proofOfOwnership" as proofOfOwnership;
-import "ecc/babyjubjubParams" as context;
-
-def main(field[2] pk, private field sk) {
-
-    // perform prove of ownership of sk
-    bool proof = proofOfOwnership(pk, sk, context());
-    assert(proof == true);
-    return;
-}
-
-
-// 2nd compilable version
-import "ecc/proofOfOwnership" as proofOfOwnership;
 from "ecc/babyjubjubParams" import BabyJubJubParams;
 import "ecc/babyjubjubParams.code" as context;
-
-def main(field[2] pk, private field sk) {
-
-	// load in BbyJubJub context
-	BabyJubJubParams context = context();
-
-    // perform prove of ownership of sk
-    bool proof = proofOfOwnership(pk, sk, context);
-    assert(proof == true);
-    return;
-}
-
-//3rd compatible version
-import "ecc/proofOfOwnership" as proofOfOwnership;
-from "ecc/babyjubjubParams" import BabyJubJubParams;
-import "ecc/babyjubjubParams.code" as context;
-
-def main(field[2] pk, private field sk) -> bool {
-
-	// load in BbyJubJub context
-	BabyJubJubParams context = context();
-
-    // perform prove of ownership of sk
-    bool proof = proofOfOwnership(pk, sk, context);
-    return(proof);
-}
-
-//possibly final version of ZKP circuit needed by ODIM:
-import "ecc/proofOfOwnership" as proofOfOwnership;
-from "ecc/babyjubjubParams" import BabyJubJubParams;
-import "ecc/babyjubjubParams.code" as context;
-
-//TODO: use eddsa in here, 
-// making the python script obsolete must be necessary as 
-// the private and public key must be inserted as before transformation so that one can work with the retrieved public key from ODIM's identities list ????
 
 def main(field[2] pk, private field sk) -> field[2] {
 
