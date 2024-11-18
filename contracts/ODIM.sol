@@ -142,8 +142,8 @@ library Pairing {
 // On-chain Decentralized Identity Manager (ODIM)
 contract ODIM {
 
-    mapping(string => string) public identities; //stores each user's circular linked list of identifiers such as DIDs or wallet addresses (note: the circluar linked list of identifiers builds the decentralized identity of the user)
-    mapping(string => uint256[2]) public publicKeys; //stores the hex encoeded babyjubjub based public key of identifier listed in the circular linked list of each user's identifiers
+    mapping(string => string) private identities; //stores each user's circular linked list of identifiers such as DIDs or wallet addresses (note: the circluar linked list of identifiers builds the decentralized identity of the user)
+    mapping(string => uint256[2]) private publicKeys; //stores the hex encoeded babyjubjub based public key of identifier listed in the circular linked list of each user's identifiers
 
     event IdentityAdded(string addedBy, string newIdentity);
     event IdentityRemoved(string removedBy, string removedIdentity);

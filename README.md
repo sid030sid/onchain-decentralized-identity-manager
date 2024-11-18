@@ -15,180 +15,26 @@ ODIM allows users to manage the identifiers that they have created to use Decent
     - run `python createBabyJubJubKeyPair.py` in active virtual environment, which outputs babyjubjub based key pair in `babyJubJubKeyPair.txt`
 - test ODIM: open terminal and run `npx hardhat test` while in root folder (run `REPORT_GAS=true npx hardhat test` if gas report should be printed out)
 - use ODIM locally:
-  1. copy the `main.zok` in ``zokrates-circuts`` folder and paster the file into [remix IDE](https://remix.ethereum.org/) with [zokrates plugin](https://zokrates.github.io/gettingstarted.html) installed
-  2. using zokrates plugin:
-    - compile ``main.zok`` in remix
-    - compute wittness
-    - generate proof of wittness
-  5. insert the proof into ODIM while adding new identity to decentralized identity
-3. deploy ODIM: open terminal and run `npx hardhat ignition deploy ./ignition/modules/Lock.js` while in root folder
-4. use ODIM to manage my decentralized identity:
-    - Option 1 - via Etherscan interface: Demo video TBA
-    - Option 2 - via script: TBA
-    - Create ZKP: TBA
-5. use ODIM to query its decentralized identity registry:
-    - Check if a specific identifier is part of ODIM's identity registry: TBA 
-    - Get decentralized identity, i. e. get all identifiers of one user: TBA
+  1. copy the `main.zok` in ``zokrates-circuits`` folder and paste the file into [Remix IDE](https://remix.ethereum.org/) with [zokrates plugin](https://zokrates.github.io/gettingstarted.html) installed
+  2. using zokrates plugin...
+    - compile ``main.zok`` in Remix
+    - compute wittness by inputting...
+      1. the babyjubjub based public key coordinates for variable `pk`, starting with ``x`` and then ``y``
+      2. the private key of the babyjubjub based public key for variable `sk`
+      3. click on `Compute`
+    - Run Setup
+    - generate proof of wittness and copy the output which is the proof and the input needed by ODIM to verify the ownership of the babyjubjub based key pair 
+  3. copy `ODIM.sol` in folder `contracts` and paste it into Remix IDE inside folder `contracts`
+  4. verify ``ODIM.sol`` contract in Remix
+  5. Deploy ``ODIM.sol`` contract while having selected `Dev - Hardhat Provider` as environment (Note: this requires runnning `npx hardhat node` inside the terminal while in root folder of the ODIM repo)
+  6. Under ``deployed contracts``, Remix now provides a simple user interface for interacting with ODIM. Here a quick overview about ODIM's funtions:
+    - `addIdentity`: Adds a new identity to the circular linked list of the sender's decentralized identity (Note: this function requires the Zokrates based ZKP of control over the to be added identity which is inserted as inputs: `proof` and `ìnput`)
+    - `removeIdentity`: Removes an identity from the circular linked list of the sender's decentralized identity.
+    - `getNextIdentity`:Gets the next identity in the circular linked list of the sender's decentralized identity.
+    - `verifyTx`: Verifies the Zokrates based ZKP of control over a babyjubjub based keypair (Note: this function is called by the function `addIdentity` and is available so that one can test the verification of the ZKP before inserting it in `addIdentity` function.)
 
 ## Why using ODIM?
 1. Revocery
 2. Interoperability
 3. Regulations
 4. TBC
-
-## Comparison Key Pair Types:
-**NOTE**: Only the numbers of the BabyJubJub curve where examined regarding their correctness (See [here](https://docs.zkbob.com/implementation/elliptic-curve-cryptography) for source).
-Public and private key pairs differ based on their underlying cruve. **BabyJubJub**, **secp256k1**, **prime256v1 (P-256)**, and **Ed25519** are the curves compared in the following:
-
-### 1. **Curve Equation**
-
-- **BabyJubJub**:
-  - The BabyJubJub curve is a **twisted Edwards curve** with the equation:
-    \[
-    a \cdot x^2 + y^2 = 1 + d \cdot x^2 \cdot y^2
-    \]
-    - It is designed for efficiency in **zero-knowledge proofs** (zk-SNARKs) and uses the **ALT_BN128** pairing-friendly field.
-
-- **secp256k1**:
-  - secp256k1 is a **Weierstrass curve** with the equation:
-    \[
-    y^2 = x^3 + 7
-    \]
-    - It is particularly optimized for blockchain applications like **Bitcoin** and **Ethereum**, offering very fast operations.
-
-- **prime256v1 (P-256)**:
-  - P-256 is another **Weierstrass curve** defined by the equation:
-    \[
-    y^2 = x^3 - 3x + b
-    \]
-    - This curve is used widely in **TLS** (Transport Layer Security) and for **X.509 certificates**.
-
-- **Ed25519**:
-  - Ed25519 is an **Edwards curve**, specifically designed for **EdDSA** (Edwards-curve Digital Signature Algorithm) with the equation:
-    \[
-    -x^2 + y^2 = 1 - \frac{1}{d} x^2 y^2
-    \]
-    - It is widely used in **cryptographic signatures** due to its fast, secure, and simple structure.
-
-### 2. **Modulus (Finite Field)**
-
-- **BabyJubJub**:
-  - Modulus: 
-    \[
-    21888242871839275222246405745257275088548364400416034343698204186575808495617
-    \]
-  - It uses a 256-bit field, ensuring security against quantum attacks and optimized for zk-SNARKs.
-
-- **secp256k1**:
-  - Modulus:
-    \[
-    0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEFFFFFC2F
-    \]
-  - This 256-bit prime field is used in **blockchain systems**, including Bitcoin.
-
-- **prime256v1 (P-256)**:
-  - Modulus:
-    \[
-    0xffffffff00000001000000000000000000000000ffffffffffffffffffffffff
-    \]
-  - This is a **256-bit** prime modulus used in many **cryptographic protocols** such as TLS.
-
-- **Ed25519**:
-  - Modulus:
-    \[
-    2^{255} - 19
-    \]
-  - Ed25519 operates over a **255-bit** prime field, offering a higher level of security compared to 256-bit primes (as it’s harder to break).
-
-### 3. **Curve Order**
-
-- **BabyJubJub**:
-  - Order:
-    \[
-    21888242871839275222246405745257275088614511777268538073601725287587578984328
-    \]
-  - The curve order is a large prime, offering high cryptographic security, with an emphasis on zero-knowledge proofs.
-
-- **secp256k1**:
-  - Order:
-    \[
-    0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEBAAEDCE6AF48A03BBFD25E8CD0364141
-    \]
-  - The order of secp256k1 is prime and ensures a strong cryptographic group for **digital signatures** in blockchain protocols.
-
-- **prime256v1 (P-256)**:
-  - Order:
-    \[
-    0xffffffff00000001000000000000000000000000fffffffffffffffffffffffe
-    \]
-  - P-256 has a prime order of 256 bits, providing strong cryptographic security for **public-key infrastructure**.
-
-- **Ed25519**:
-  - Order:
-    \[
-    2^{252} + 277423177773723535358519377994722421153388713030662548748632335973
-    \]
-  - Ed25519's order is a large prime, ensuring that cryptographic operations are secure and resistant to attacks.
-
-### 4. **Cofactor**
-
-- **BabyJubJub**:
-  - Cofactor: **8**
-  - The cofactor indicates how many points lie outside the cryptographic subgroup. A cofactor of 8 means it’s easier to generate a valid point for cryptographic purposes.
-
-- **secp256k1**:
-  - Cofactor: **1**
-  - secp256k1 has a cofactor of 1, making it highly efficient because every point on the curve belongs to the cryptographic subgroup used for operations.
-
-- **prime256v1 (P-256)**:
-  - Cofactor: **1**
-  - Similar to secp256k1, P-256 has a cofactor of 1, which makes all points valid for cryptographic operations.
-
-- **Ed25519**:
-  - Cofactor: **8**
-  - Ed25519 also has a cofactor of 8, but since it’s a **Edwards curve**, its group structure is inherently more efficient for signatures and key generation.
-
-### 5. **Generator Point**
-
-- **BabyJubJub**:
-  - Generator point coordinates: 
-    \[
-    (x, y) = (15432774951723927157031250336277790668279068029556328898354949310072202318295, 1094793399012674419577823790376044935246658671901627841542961578327961423020)
-    \]
-  - This generator is used to generate public keys and perform elliptic curve operations.
-
-- **secp256k1**:
-  - Generator point coordinates:
-    \[
-    (x, y) = (0x79BE667EF9DCBBAC55A62ED6FBF8F6F8B8BEF9D5369F559F73E92D1F7E7F99A0F2, 0x7CFD8D2C6D5EE6BC83C20F80539A5A68A41A78F9072C5B7E2B706AB4CC44D45F2)
-    \]
-  - These are the standard generator point coordinates used in Bitcoin and Ethereum.
-
-- **prime256v1 (P-256)**:
-  - Generator point coordinates:
-    \[
-    (x, y) = (0x6B17D1F2E12C4247F8BCE6E22C6C03B5D86F04B8E4A5F164A37A3E4D1D5B7F5C8, 0x4FE342E2FE1A7F9B8B80C8E7EB49E1D6D91E94E1C79E0F0A6F34D16FB9A4C1C6F)
-    \]
-  - The generator used in P-256 for public-key generation and **ECDSA** signatures.
-
-- **Ed25519**:
-  - Generator point coordinates:
-    \[
-    (x, y) = (0x216936D3CD6A8A5F6E4B498907A38E90890A2BE48C8103B55A9F2F32C33D6D8, 0x666666666666666666666666666666666666666666666666666666666666666)
-    \]
-  - Ed25519 uses a different point for public key generation and **EdDSA** signature verification.
-
-### 6. **Security Level**
-
-- **BabyJubJub**:
-  - Offers **128-bit security**, making it strong enough for cryptographic proofs and zero-knowledge applications.
-  - It’s widely used in **zk-SNARK** applications, such as **Zcash**.
-
-- **secp256k1**:
-  - secp256k1 provides **128-bit security**, making it suitable for digital signature schemes like those used in **Bitcoin** and **Ethereum**.
-
-- **prime256v1 (P-256)**:
-  - Provides **128-bit security** as well, which is widely trusted for **TLS** and **X.509 certificates**.
-
-- **Ed25519**:
-  - Ed25519 offers **128-bit security** but with higher efficiency in terms of key generation and signing operations. It’s used in modern **cryptographic applications** like **OpenSSH**, **TLS**, and **signal protocols**.
