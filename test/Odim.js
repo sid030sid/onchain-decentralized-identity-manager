@@ -40,14 +40,11 @@ describe("ODIM", function () {
     const proof = [["0x23d120fb2b8d7f810da6c2227c12d484e638f638afe7c223c0c3179df03775b0","0x27c84be6b813c817774dfd4fbfb9a14cfb7a6a854558d318123605e6a2c2b564"],[["0x1decd236d26865ca024cbb8afe07be335ebce586434e4aa004f6ef8ada508d11","0x02a5c581fec1bb8ad2ca85e33e052c44e6e630fd9b2696e93d832e953032ce3a"],["0x2dc4807df77ab81c96d27ab688e879bca228254674f1268f5c87fcb8a8cf13e9","0x2cc1a707f0b7c6035550c5bed90f38fbd307487bd99d195eb06206e1b92c6595"]],["0x0871eabdf1ca4a8e52cdf5a09c9bd07fe2dfbf6ebbb1262b9bbebf15979496d1","0x004454c753c9eaae1cde537c00b0f2eba2173b5ac36b833a98e3f360285c0957"]]
     const inputs = ["0x0cb5dbe89aae1fc863fbe6697cb902d4bb9e3987ad44a194640cca0a5852bea0","0x272446c799ec688204f91aabca7d4a4bca69deeafbb41aad4cd831a14de445b5","0x0cb5dbe89aae1fc863fbe6697cb902d4bb9e3987ad44a194640cca0a5852bea0","0x272446c799ec688204f91aabca7d4a4bca69deeafbb41aad4cd831a14de445b5"]
 
-    const proof2 = [["0x2d75e213f281c8e3ecede2ef0c418260c91736e19171d4ac9c9c6a7663c15b56","0x16d094595a3e5e4eeced3f8578785a60b06e657f1015c970188a74457f18dfe4"],[["0x2a5d618d31478774fefb9cf42138d89a990c48e155cf70a0fea2fbe1d80c6bec","0x22202ca1fbefa02e70593f9fc4d465a6a6b61d3c1c431aadae791a0a5288ede7"],["0x247b849670c601e497a9330fa2395f986a465bdbb194f0e5a503989d5aae804a","0x0c8670cdcc52fdef98316db09d880660c5dfbf935b538f3d9a496b7208f60fa7"]],["0x04212ec43ab7e87b55c8f4571b7388a8bf8380ca8d57253f34d16d5b1bdcc15c","0x1d58237b9be0a7b9097301e41f018fcfcf795fad4d9b5ef8689146403910d2e8"]]
-    const inputs2 = ["0x1f234823c8dcddaa36641324047a99867b7b508ed5bbc8d0db8f74f91bddc036","0x1eeeeda9650ce10a3379b4a8398c8aa610476ba3f312807539c81cd089e265ca","0x1f234823c8dcddaa36641324047a99867b7b508ed5bbc8d0db8f74f91bddc036","0x1eeeeda9650ce10a3379b4a8398c8aa610476ba3f312807539c81cd089e265ca"]
-    
     it("add one identity to decentralized identity of owner", async function () {
       const { odim, owner } = await loadFixture(deployODIM);
 
       // Call the addIdentity function
-      const tx = await odim.addIdentity("did:example:123", proof2, inputs2);
+      const tx = await odim.addIdentity("did:example:123", proof, inputs);
 
       // Wait for the transaction to be mined and get the receipt
       const receipt = await tx.wait();
