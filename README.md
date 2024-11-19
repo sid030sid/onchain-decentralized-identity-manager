@@ -35,7 +35,10 @@ ODIM allows users to manage the identifiers that they have created to use Decent
 - programatically query decentralized identity of users via ODIM: see function `getDecentralizedIdentityFromOdim` in `ODIM.js` inside folder `test`
 
 ## Why using ODIM?
-1. Revocery
-2. Interoperability
-3. Regulations
-4. TBC
+1. Countering fragmentation of users' identity in web 3 (= 1 user with multiple DIDs and wallet addresses)
+2. Seamless interaction with Issuers, and Verifiers of VCs as well as DApps in general
+3. Interoperability between SSI systems
+4. Transfer of DID-specific properties to other DIDs (e.g. owners of did:ebsi identifiers are trusted by the EU so using ODIM to linki any other DID with did:ebsi identifiers leads to a transfer of trust to those other DIDs)
+5. Enhanced security due to back up DIDs that can be used for DID Revocery
+6. Compliance with regulations in web 3 to counter fraud and enhance accountability
+7. TBC
