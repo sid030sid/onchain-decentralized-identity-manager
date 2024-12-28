@@ -1,20 +1,23 @@
 # ODIM: **O**n-chain **D**ecentralized **I**dentity **M**anager
 ODIM allows users to manage the identifiers that they have created to use Decentralized Applications (DApps). Such identifiers, e. g. wallet addresses or Decentralized Identifiers (DIDs), form the unique decentralized identity of users. Therefore, ODIM is world's first **O**n-chain **D**ecentralized **I**dentity **M**anager, enabling users to manage their decentralized identity efficiently while DApps can rely on ODIM's decentralized identity registry for interoperability of decentralized processes, such as the issuance and verification of verifiable credentials (see more for [why using ODIM](#why-using-odim)).
 
+## Presentation about ODIM
+View this video for an introduction to ODIM.
+
 ## How to...
-- set up ODIM: 
+- How to set up ODIM: 
   1. open terminal and run `npm install` while in root folder (**NOTE**: nodeJS version 20.8.1 was used to build this repo!)
   2. generate babyjubjub based key pair which must be added as new verification method of the DID that should be added to decentralized identity managable through ODIM:
     - set up [zokrates-pycrypto](https://github.com/Zokrates/pycrypto) following its [installation description](https://github.com/Zokrates/pycrypto/tree/master?tab=readme-ov-file#install) which includes:
-      - clonning `zokrates-pycrypto` 
+      - cloning `zokrates-pycrypto` 
       - creating virtual environment, named ``venv``, by running ``py -m venv venv``
       - activating virtual environment by running ``venv\Scripts\activate.bat`` in cmd terminal
       - running `pip install -r requirements.txt` in active virtual env to install dependencies
       - running `pip install py-multibase cbor2` as additional dependencies
     - add files of folder `zokrates-pycrypto-code` into the cloned repo of zokrate's `pycrypto`
     - run `python createBabyJubJubKeyPair.py` in active virtual environment, which outputs babyjubjub based key pair in `babyJubJubKeyPair.txt`
-- test ODIM: open terminal and run `npx hardhat test` while in root folder (run `REPORT_GAS=true npx hardhat test` if gas report should be printed out)
-- use ODIM locally:
+- How to test ODIM: open terminal and run `npx hardhat test` while in root folder (run `REPORT_GAS=true npx hardhat test` if gas report should be printed out)
+- How to use ODIM locally:
   1. copy the `main.zok` in ``zokrates-circuits`` folder and paste the file into [Remix IDE](https://remix.ethereum.org/) with [zokrates plugin](https://zokrates.github.io/gettingstarted.html) installed
   2. using zokrates plugin...
     - compile ``main.zok`` in Remix
@@ -35,10 +38,12 @@ ODIM allows users to manage the identifiers that they have created to use Decent
 - programatically query decentralized identity of users via ODIM: see function `getDecentralizedIdentityFromOdim` in `ODIM.js` inside folder `test`
 
 ## Why using ODIM?
-1. Countering fragmentation of users' identity in web 3 (= 1 user with multiple DIDs and wallet addresses)
+1. Countering fragmentation of users' identity in web 3, i.e. one user often has multiple DIDs and wallet addresses
 2. Seamless interaction with Issuers, and Verifiers of VCs as well as DApps in general
 3. Interoperability between SSI systems
-4. Transfer of DID-specific properties to other DIDs (e.g. owners of did:ebsi identifiers are trusted by the EU so using ODIM to linki any other DID with did:ebsi identifiers leads to a transfer of trust to those other DIDs)
-5. Enhanced security due to back up DIDs that can be used for DID Revocery
-6. Compliance with regulations in web 3 to counter fraud and enhance accountability
-7. TBC
+4. Transfer of DID-specific properties to other DIDs can occur when, for example, owners of did:ebsi identifiers - trusted by the EU - use ODIM to link their identifiers with other DIDs, effectively extending the trust associated with did:ebsi to those additional DIDs
+5. Enhanced security due to back up DIDs that may be useful for DID revocery (Future Work: DID revovery with ODIM)
+6. ODIM additionally acts as public registry of DIDs and wallet addresses (Future Work: ODIM based [decentralized public key infrastructure](https://arxiv.org/abs/2406.11511))
+
+## Future Work:
+1. Enhance privacy

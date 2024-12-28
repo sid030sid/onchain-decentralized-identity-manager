@@ -17,7 +17,7 @@ const getDecentralizedIdentityFromOdim = async (identifier, odim) => {
 
 describe("ODIM", function () {
   async function deployODIM() {
-    // Contracts are deployed using the first signer/account by default
+    // Contracts are deployed using the first account stored in var owner
     const [owner, otherAccount] = await ethers.getSigners();
 
     const ODIM = await ethers.getContractFactory("ODIM");
