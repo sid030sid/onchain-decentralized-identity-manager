@@ -1,1 +1,2 @@
 Debug: publicKey value of an identity must be included in the identity itself otherwise one can use the same ZKP to add multiple different identities that all point to the same public key. since this does not make much sense for the user, this bug can remain for now.
+make github action work: https://www.youtube.com/watch?v=eRKaQL8yuMk
