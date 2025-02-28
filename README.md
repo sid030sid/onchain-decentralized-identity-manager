@@ -45,5 +45,9 @@ View this video for an introduction to ODIM.
 5. Enhanced security due to back up DIDs that may be useful for DID revocery (Future Work: DID revovery with ODIM)
 6. ODIM additionally acts as public registry of DIDs and wallet addresses (Future Work: ODIM based [decentralized public key infrastructure](https://arxiv.org/abs/2406.11511))
 
+## GitHub Actions
+This repo uses the following GitHub Actions:
+1. On push of every commit the tests in folder `test` are run.
+
 ## Future Work:
 1. Enhance privacy
